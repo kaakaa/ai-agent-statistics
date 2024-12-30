@@ -1,11 +1,13 @@
 from pydantic import BaseModel
 
 class PRRepository(BaseModel):
+    id: str
     nameWithOwner: str
     stargazerCount: int
     forkCount: int
 
 class PullRequest(BaseModel):
+    id: str
     title: str
     url: str
     createdAt: str

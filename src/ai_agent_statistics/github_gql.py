@@ -6,6 +6,7 @@ search_pr_query = query = """
         edges {{
             node {{
                 ... on PullRequest {{
+                    id
                     title
                     url
                     createdAt
@@ -17,6 +18,7 @@ search_pr_query = query = """
                     changedFiles
 
                     repository {{
+                        id
                         nameWithOwner
                         stargazerCount
                         forkCount
