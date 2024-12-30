@@ -29,18 +29,7 @@ class Store:
 
     def update_pull_request(self, pr):
         self.connection.execute(
-            f"""INSERT INTO pull_request VALUES (
-                '{pr.id}',
-                '{pr.title}',
-                '{pr.url}',
-                '{pr.createdAt}',
-                '{pr.state}',
-                {pr.totalCommentsCount},
-                {pr.additions},
-                {pr.deletions},
-                {pr.changedFiles},
-                '{pr.repository.id}'
-            )
+            f"""INSERT INTO pull_request VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT (id) DO UPDATE SET
                 title = EXCLUDED.title,
                 url = EXCLUDED.url,
@@ -51,22 +40,33 @@ class Store:
                 deletions = EXCLUDED.deletions,
                 changedFiles = EXCLUDED.changedFiles,
                 repositoryId = EXCLUDED.repositoryId
-            """
+            """,(
+                pr.id,
+                pr.title,
+                pr.url,
+                pr.createdAt,
+                pr.state,
+                pr.totalCommentsCount,
+                pr.additions,
+                pr.deletions,
+                pr.changedFiles,
+                pr.repository.id
+            )
         )
     
     def update_repository(self, repository):
         self.connection.execute(
-            f"""INSERT INTO repository VALUES (
-                '{repository.id}',
-                '{repository.nameWithOwner}',
-                {repository.stargazerCount},
-                {repository.forkCount}
-            )
+            f"""INSERT INTO repository VALUES (?, ?, ?, ?)
             ON CONFLICT (id) DO UPDATE SET
                 nameWithOwner = EXCLUDED.nameWithOwner,
                 stargazerCount = EXCLUDED.stargazerCount,
                 forkCount = EXCLUDED.forkCount
-            """
+            """, (
+                repository.id,
+                repository.nameWithOwner,
+                repository.stargazerCount,
+                repository.forkCount
+            )
         )
 
     def get_version(self) -> str | None:
