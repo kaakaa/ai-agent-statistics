@@ -1,5 +1,4 @@
 import logging
-import time
 
 import requests
 
@@ -23,6 +22,9 @@ query ($search_query: String!, $after: String) {
             node {
                 ... on PullRequest {
                     id
+                    author {
+                        login
+                    }
                     title
                     url
                     createdAt
@@ -57,14 +59,13 @@ class GitHubGQLClient:
             "Content-Type": "application/json",
         }
     
-    def query_pr(self, author_name: str) -> list[PullRequest]:
+    def query_pr(self, author_name: str, callback) -> None:
         has_next_page = True
         after_cursor = None
-        results = []
         count = 0
 
         while has_next_page:
-            logger.info(f"Querying PRs for '{author_name}' after '{after_cursor}'")
+            logger.info(f"[{count+1}] Querying PRs for '{author_name}' after '{after_cursor}'")
             variables = {
                 "search_query": f"author:{author_name} type:pr",
                 "after": after_cursor
@@ -84,15 +85,11 @@ class GitHubGQLClient:
                     logger.error(ret["errors"])
                     raise Exception("Query failed")
                 
-                list = [PullRequest.model_validate(pr["node"]) for pr in ret["data"]["search"]["edges"]]
-                results.extend(list)
+                for pr in [PullRequest.model_validate(pr["node"]) for pr in ret["data"]["search"]["edges"]]:
+                    callback(pr)
 
                 page_info = ret["data"]["search"]["pageInfo"]
                 has_next_page = page_info["hasNextPage"]
                 after_cursor = page_info["endCursor"]
             else:
                 raise Exception(f"Query failed: {response.status_code}: {response.text}")
-            
-            time.sleep(1)
-
-        return results

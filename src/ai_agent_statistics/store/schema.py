@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS pull_request (
     additions INTEGER,
     deletions INTEGER,
     changedFiles INTEGER,
-    repositoryId TEXT   
+    repositoryId TEXT,
+    author TEXT
 )
 """
 

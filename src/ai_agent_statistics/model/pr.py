@@ -6,8 +6,12 @@ class PRRepository(BaseModel):
     stargazerCount: int
     forkCount: int
 
+class Author(BaseModel):
+    login: str
+
 class PullRequest(BaseModel):
     id: str
+    author: Author | None = None
     title: str
     url: str
     createdAt: str
