@@ -4,6 +4,12 @@ async function fetchData() {
     const db = new duckdb.Database();
     const conn = await db.connect();
 
+    const response = await fetch('/ai-agent-statistics/store.db');
+    const arrayBuffer = await response.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    await conn.load(uint8Array);
+
     const pullRequestQuery = "SELECT * FROM pull_request";
     const repositoryQuery = "SELECT * FROM repository";
 
