@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useDuckDB from '../DuckDB';
-import '../App.css';
+import './PullRequests.css'
 
 type PullRequest = {
     id: string;
@@ -16,22 +16,23 @@ type PullRequest = {
     repositoryId: string;
 }
 
+
 const columns: GridColDef[] = [
   { 
     field: 'title',
     headerName: 'Title',
-    width: 300,
+    width: 400,
     renderCell: (params) => (
         <a href={params.row.url}>{params.value}</a>
     )
   },
-  { field: 'createdAt', headerName: 'Created At', width: 100 },
-  { field: 'state', headerName: 'State', width: 75 },
+  { field: 'createdAt', headerName: 'Created At', width: 150 },
+  { field: 'state', headerName: 'State', width: 85 },
   { field: 'totalCommentsCount', headerName: 'Comments', width: 75 },
   { field: 'additions', headerName: 'Additions', width: 75 },
   { field: 'deletions', headerName: 'Deletions', width: 75 },
   { field: 'changedFiles', headerName: 'Changed Files', width: 75 },
-  { field: 'author', headerName: 'Author', width: 100 },
+  { field: 'author', headerName: 'Author', width: 150 },
 ];
 
 function PullRequestsTable() {
@@ -67,7 +68,7 @@ function PullRequestsTable() {
   return (
     <>
       <h1>Pull Requests</h1>
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ height: '85%', width: '100%' }}>
         <DataGrid
             rowHeight={25}
             columnHeaderHeight={30}
@@ -76,15 +77,15 @@ function PullRequestsTable() {
             sx={{
               '& .MuiDataGrid-cell': {
                 backgroundColor: '#f5f5f5',
-                fontSize: '9px',
+                fontSize: '12px',
               },
               '& .MuiDataGrid-columnHeaders': {
                 backgroundColor: '#e0e0e0',
-                fontSize: '10px',
+                fontSize: '14px',
               },
               '& .MuiDataGrid-footerContainer': {
                 backgroundColor: '#d0d0d0',
-                fontSize: '10px',
+                fontSize: '14px',
               },
             }}
         />
