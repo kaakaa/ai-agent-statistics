@@ -44,7 +44,8 @@ function PullRequestsTable() {
 
       try {
         const conn = await db.connect();
-        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`.replace(/\/$/, '');
+        console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
         const result = (await conn.query(`SELECT * FROM '${baseUrl}/pull_request.parquet'`)).toArray();
         setData(result);
         console.log('success to load remote parquet file');
