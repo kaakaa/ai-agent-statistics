@@ -59,15 +59,20 @@ class GitHubGQLClient:
             "Content-Type": "application/json",
         }
     
-    def query_pr(self, author_name: str, callback) -> None:
+    def query_pr(self, author_name: str, callback, start_date: str = None, end_date: str = None) -> None:
         has_next_page = True
         after_cursor = None
         count = 0
 
         while has_next_page:
             logger.info(f"[{count+1}] Querying PRs for '{author_name}' after '{after_cursor}'")
+            date_filter = ""
+            if start_date:
+                date_filter += f" created:>={start_date}"
+            if end_date:
+                date_filter += f" created:<={end_date}"
             variables = {
-                "search_query": f"author:{author_name} type:pr",
+                "search_query": f"author:{author_name} type:pr{date_filter}",
                 "after": after_cursor
             }
 

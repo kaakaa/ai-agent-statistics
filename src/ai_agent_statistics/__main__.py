@@ -1,5 +1,6 @@
 import logging
 import os
+import argparse
 from functools import partial
 
 from ai_agent_statistics.github_gql import GitHubGQLClient
@@ -22,14 +23,19 @@ def save(store: Store, registered_repos: list, pr: PullRequest):
     except Exception as e:
         logger.error(f"Failed to update PR {pr.id}: {e}\n{pr}")
 
-def run(token: str):
+def run(token: str, start_date: str = None, end_date: str = None):
     store = Store("store.db")
     client = GitHubGQLClient(token)
 
     callback = partial(save, store, [])
     for author in ["devin-ai-integration[bot]", "openhands-agent"]:
-         client.query_pr(author, callback)
+         client.query_pr(author, callback, start_date, end_date)
 
 if __name__ == "__main__":
-    token = os.getenv("GITHUB_TOKEN")
-    run(token)
+    parser = argparse.ArgumentParser(description="GitHub PR Statistics")
+    parser.add_argument("token", help="GitHub token")
+    parser.add_argument("--start-date", help="Start date for the query (YYYY-MM-DD)")
+    parser.add_argument("--end-date", help="End date for the query (YYYY-MM-DD)")
+    args = parser.parse_args()
+
+    run(args.token, args.start_date, args.end_date)
