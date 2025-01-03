@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 search_pr_query = query = """
 query ($search_query: String!, $after: String) {
     search(query: $search_query, type: ISSUE, first: 5, after:$after) {
+        issueCount
         edges {
             node {
                 ... on PullRequest {
@@ -59,15 +60,16 @@ class GitHubGQLClient:
             "Content-Type": "application/json",
         }
     
-    def query_pr(self, author_name: str, callback) -> None:
+    def query_pr(self, author_name: str, callback, additional_query: str | None = None) -> None:
         has_next_page = True
         after_cursor = None
+        total_issue_count = -1
         count = 0
 
         while has_next_page:
-            logger.info(f"[{count+1}] Querying PRs for '{author_name}' after '{after_cursor}'")
+            logger.info(f"[{count+1}/{total_issue_count}] Querying PRs for '{author_name}' after '{after_cursor}'")
             variables = {
-                "search_query": f"author:{author_name} type:pr",
+                "search_query": f"author:{author_name} type:pr {additional_query}",
                 "after": after_cursor
             }
 
@@ -88,6 +90,8 @@ class GitHubGQLClient:
                 for pr in [PullRequest.model_validate(pr["node"]) for pr in ret["data"]["search"]["edges"]]:
                     callback(pr)
 
+                if total_issue_count == -1:
+                    total_issue_count = ret["data"]["search"]["issueCount"]
                 page_info = ret["data"]["search"]["pageInfo"]
                 has_next_page = page_info["hasNextPage"]
                 after_cursor = page_info["endCursor"]
