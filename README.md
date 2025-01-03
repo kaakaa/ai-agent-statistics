@@ -9,7 +9,7 @@ Collect PullRequest create by AI Agents, and view statistics for that.
 ```
 # Collect data by GitHub GraphQL API
 $ poetry install
-$ poetry run python src/ai_agent_statistics/__main__.py --token=github_pat_... --start-date=2024-12-245 --end-date=2024-12-31
+$ poetry run python src/ai_agent_statistics/__main__.py --token=github_pat_... --start-date=2024-12-25 --end-date=2024-12-31
 => store and update data to ./store.db
 
 # Transform data to web readable format
