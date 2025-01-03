@@ -2,7 +2,7 @@
 
 Collect PullRequest create by AI Agents, and view statistics for that.
 
-## Summay
+## Summary
 
 * requred GitHub Fine-grained access token without any permissions
 
