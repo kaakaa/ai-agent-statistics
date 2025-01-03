@@ -4,7 +4,8 @@ import {
   AddCircleOutline,
   Comment,
   Difference,
-  RemoveCircleOutline
+  GitHub,
+  RemoveCircleOutline,
 } from '@mui/icons-material';
 import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
@@ -37,7 +38,7 @@ const columns: GridColDef[] = [
   { 
     field: 'title',
     headerName: 'Title',
-    width: 500,
+    width: 400,
     renderCell: (params) => (
         <a href={params.row.url}>{params.value}</a>
     )
@@ -46,6 +47,13 @@ const columns: GridColDef[] = [
   { field: 'changedFiles', renderHeader: () => <Tooltip title={'Changed Files'}><Difference fontSize='small' /></Tooltip>, width: 85},
   { field: 'additions', renderHeader: () => <Tooltip title={'Line Additions'}><AddCircleOutline fontSize='small' sx={{color: red[400]}}/></Tooltip>, width: 85},
   { field: 'deletions', renderHeader: () => <Tooltip title={'Line Deletions'}><RemoveCircleOutline fontSize='small' sx={{color: blue[400]}}/></Tooltip>, width: 85},
+  { field: 'repository', headerName: 'Repository', width: 250, renderCell: (params) => (
+    <>
+      <span style={{marginRight: '3px'}}><a href={`https://github.com/${params.row.nameWithOwner}`}> <GitHub fontSize='small' />{params.row.nameWithOwner}</a></span>
+    </>
+  )},
+  { field: 'stargazerCount', headerName: 'Stars', width: 85 },
+  { field: 'forkCount', headerName: 'Forks', width: 85 },
 ];
 
 function PullRequestsTable() {
@@ -60,7 +68,7 @@ function PullRequestsTable() {
         const conn = await db.connect();
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`.replace(/\/$/, '');
         console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
-        const result = (await conn.query(`SELECT * FROM '${baseUrl}/pull_request.parquet'`)).toArray();
+        const result = (await conn.query(`SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`)).toArray();
         setData(result);
         console.log('success to load remote parquet file');
       } catch (error) {
