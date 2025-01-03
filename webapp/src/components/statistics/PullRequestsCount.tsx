@@ -12,7 +12,7 @@ const PullRequestsCountChart = ({prCounts}: ChartProps) => {
         {name: "devloai", color: 'rgba(0, 122, 255, 1)'},
         {name: "openhands-agent", color: 'rgba(255, 204, 0, 1)'},
     ];
-    const labels = Array.from(new Set(prCounts.map((prCount: any) => prCount.date)));
+    const labels = Array.from(new Set(prCounts.map((prCount: PRCount) => prCount.date)));
 
     const datasets = authors.map(author => {
         const countsByAuthor = prCounts.filter((prCount: any) => prCount.author === author.name)
