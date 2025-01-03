@@ -4,7 +4,7 @@ Collect PullRequest create by AI Agents, and view statistics for that.
 
 ## Summary
 
-* requred GitHub Fine-grained access token without any permissions
+* required GitHub Fine-grained access token without any permissions
 
 ```
 # Collect data by GitHub GraphQL API
