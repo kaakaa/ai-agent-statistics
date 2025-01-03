@@ -15,7 +15,7 @@ const PullRequestsCountChart = ({prCounts}: ChartProps) => {
     const labels = Array.from(new Set(prCounts.map((prCount: PRCount) => prCount.date)));
 
     const datasets = authors.map(author => {
-        const countsByAuthor = prCounts.filter((prCount: any) => prCount.author === author.name)
+        const countsByAuthor = prCounts.filter((prCount: PRCount) => prCount.author === author.name)
         const counts = labels.map(date => countsByAuthor.find((c: PRCount) => c.date === date)?.count || 0);
         return {
             label: author.name,
