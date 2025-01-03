@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  AddCircleOutline,
+  Comment,
+  Difference,
+  RemoveCircleOutline
+} from '@mui/icons-material';
+import { blue, red } from '@mui/material/colors';
+import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '../DuckDB';
 import './PullRequests.css'
 
@@ -16,23 +24,28 @@ type PullRequest = {
     repositoryId: string;
 }
 
-
 const columns: GridColDef[] = [
+  { field: 'author', headerName: 'Author', width: 150 },
+  { field: 'createdAt', headerName: 'Created At', width: 100, renderCell: (params) => (
+    <>
+      <Tooltip title={params.value} arrow>
+        {params.value.slice(0, 10)}
+      </Tooltip>
+    </>
+  )},
+  { field: 'state', headerName: 'State', width: 85 },
   { 
     field: 'title',
     headerName: 'Title',
-    width: 400,
+    width: 500,
     renderCell: (params) => (
         <a href={params.row.url}>{params.value}</a>
     )
   },
-  { field: 'createdAt', headerName: 'Created At', width: 150 },
-  { field: 'state', headerName: 'State', width: 85 },
-  { field: 'totalCommentsCount', headerName: 'Comments', width: 75 },
-  { field: 'additions', headerName: 'Additions', width: 75 },
-  { field: 'deletions', headerName: 'Deletions', width: 75 },
-  { field: 'changedFiles', headerName: 'Changed Files', width: 75 },
-  { field: 'author', headerName: 'Author', width: 150 },
+  { field: 'totalCommentsCount', renderHeader: () => <Tooltip title={'Comments'}><Comment fontSize='small' /></Tooltip>, width: 85},
+  { field: 'changedFiles', renderHeader: () => <Tooltip title={'Changed Files'}><Difference fontSize='small' /></Tooltip>, width: 85},
+  { field: 'additions', renderHeader: () => <Tooltip title={'Line Additions'}><AddCircleOutline fontSize='small' sx={{color: red[400]}}/></Tooltip>, width: 85},
+  { field: 'deletions', renderHeader: () => <Tooltip title={'Line Deletions'}><RemoveCircleOutline fontSize='small' sx={{color: blue[400]}}/></Tooltip>, width: 85},
 ];
 
 function PullRequestsTable() {
@@ -77,7 +90,6 @@ function PullRequestsTable() {
             sx={{
               '& .MuiDataGrid-cell': {
                 backgroundColor: '#f5f5f5',
-                fontSize: '12px',
               },
               '& .MuiDataGrid-columnHeaders': {
                 backgroundColor: '#e0e0e0',
