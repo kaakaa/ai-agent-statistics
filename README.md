@@ -23,4 +23,10 @@ $ npm run preview
 => access to http://localhost:4173/ai-agent-statistics
 ```
 
+## Accessing the Chart Page
 
+To view the chart of PR counts by date, follow these steps:
+
+1. Open your web browser.
+2. Navigate to the following URL: `http://localhost:4173/ai-agent-statistics/chart`
+3. You will see a line chart displaying the PR counts by date.
