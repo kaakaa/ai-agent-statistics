@@ -1,6 +1,6 @@
 # AI Agent Statistics
 
-Collect PullRequest craete by AI Agents, and view statistics for that.
+Collect PullRequest create by AI Agents, and view statistics for that.
 
 ## Summay
 
