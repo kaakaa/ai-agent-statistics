@@ -5,9 +5,11 @@ import './index.css'
 import PullRequestsTable from './components/PullRequests.tsx'
 import ChartPage from './components/ChartPage.tsx';
 
+const base = import.meta.env.BASE_URL
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Router>
+    <Router basename={base}>
       <Routes>
         <Route path="/" element={<PullRequestsTable />} />
         <Route path="/chart" element={<ChartPage />} />
