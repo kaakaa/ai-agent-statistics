@@ -17,6 +17,9 @@ type ScatterPlotProps = {
   backgroundColor: string;
 }
 
+const basepath = import.meta.env.BASE_URL
+const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
+
 const ScatterPlot = ({ label, data, pullRequests, xKey, yKey, backgroundColor }: ScatterPlotProps) => {
   const chartData = {
     datasets: [{
@@ -59,6 +62,19 @@ const ScatterPlot = ({ label, data, pullRequests, xKey, yKey, backgroundColor }:
                 return `${label}: (${xValue}, ${yValue}) - ${count} PRs`;
               }
             }
+          }
+        },
+        onClick: (_, elements) => {
+          if (elements.length > 0) {
+            const element = elements[0];
+            const plot: PlotPoint = data[element.index];
+
+            const searchParams = new URLSearchParams();
+            searchParams.set(xKey, plot.x.toString());
+            searchParams.set(yKey, plot.y.toString());
+            const href = `${baseUrl}/details?${searchParams.toString()}`;
+
+            window.location.href = href;
           }
         }
       }}
