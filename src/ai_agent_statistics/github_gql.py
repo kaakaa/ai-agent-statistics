@@ -61,11 +61,11 @@ class GitHubGQLClient:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
-    
+
     def query_pr(self, author_name: str, callback, additional_query: str | None = None) -> None:
         has_next_page: bool = True
         after_cursor: str | None = None
-        per_page: int = DEFAULE_PER_PAGE
+        per_page: int = DEFAULT_PER_PAGE
         num_of_req: int = 0
         total_issue_count: int = -1
 
@@ -93,7 +93,7 @@ class GitHubGQLClient:
                 if ret.get("errors"):
                     logger.error(ret["errors"])
                     raise Exception("Query failed")
-                
+
                 for pr in [PullRequest.model_validate(pr["node"]) for pr in ret["data"]["search"]["edges"]]:
                     callback(pr)
 
