@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
 import LineAdditionsPlot from './statistics/LineAdditions';
+import LineDeletionsPlot from './statistics/LineDeletions';
 
 import useDuckDB from '../DuckDB';
 import { PullRequest } from '../types';
@@ -53,6 +54,10 @@ const StatisticsPage = () => {
     <div>
       <h1>Line Additions</h1>
       <LineAdditionsPlot
+        pullRequests={data}
+      />
+      <h1>Line Deletions</h1>
+      <LineDeletionsPlot
         pullRequests={data}
       />
     </div>
