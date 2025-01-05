@@ -6,13 +6,28 @@ type ChartProps = {
     prCounts: PRCount[];
 }
 
+const basepath = import.meta.env.BASE_URL
+const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
+
 const PullRequestsCountChart = ({prCounts}: ChartProps) => {
     const authors = [
         {name: "devin-ai-integration", color: 'rgba(0, 180, 170, 1)'},
         {name: "devloai", color: 'rgba(0, 122, 255, 1)'},
         {name: "openhands-agent", color: 'rgba(255, 204, 0, 1)'},
     ];
-    const labels = Array.from(new Set(prCounts.map((prCount: PRCount) => prCount.date)));
+
+    const dates = Array.from(new Set(prCounts.map((prCount: PRCount) => prCount.date).filter(date => date)));
+    if (!dates || dates.length === 0) {
+        return <div>No data</div>
+    }
+    let begin = new Date(dates.sort((a, b) => a.localeCompare(b))[0]);
+    const end = new Date(dates.sort((a, b) => b.localeCompare(a))[0]);
+
+    const labels = [begin.toISOString().split('T')[0]];
+    while (begin < end) {
+        begin.setDate(begin.getDate() + 1);
+        labels.push(begin.toISOString().split('T')[0]);
+    }
 
     const datasets = authors.map(author => {
         const countsByAuthor = prCounts.filter((prCount: PRCount) => prCount.author === author.name)
@@ -26,7 +41,26 @@ const PullRequestsCountChart = ({prCounts}: ChartProps) => {
     });
     return (
         <>
-            <Line data={{labels, datasets: datasets}} />
+            <Line
+              data={{
+                labels,
+                datasets: datasets,
+              }}
+              options={{
+                onClick: (_, elements) => {
+                  if (elements.length > 0) {
+                    const element = elements[0];
+                    const date = labels[element.index];
+
+                    const searchParams = new URLSearchParams();
+                    searchParams.set('createdAt', date);
+                    const href = `${baseUrl}/details?${searchParams.toString()}`;
+
+                    window.location.href = href;
+                  }
+                }
+              }}
+            />
         </>
     )
 }

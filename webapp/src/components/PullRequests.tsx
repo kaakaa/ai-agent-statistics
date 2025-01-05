@@ -25,7 +25,7 @@ import { PullRequest } from '../types';
 const params = new URLSearchParams(window.location.search);
 const q = [];
 if (params.get('author')) q.push(`author='${params.get('author')}'`);
-if (params.get('createdAt')) q.push(`createdAt='${params.get('createdAt')}'`);
+if (params.get('createdAt')) q.push(`createdAt like '${params.get('createdAt')}%'`);
 if (params.get('state')) q.push(`state='${params.get('state')}'`);
 if (params.get('totalCommentsCount')) q.push(`totalCommentsCount=${params.get('totalCommentsCount')}`);
 if (params.get('changedFiles')) q.push(`changedFiles=${params.get('changedFiles')}`);
