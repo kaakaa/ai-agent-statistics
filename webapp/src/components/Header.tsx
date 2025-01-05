@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 const Header: React.FC = () => {
