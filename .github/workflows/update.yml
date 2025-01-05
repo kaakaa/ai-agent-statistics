@@ -23,6 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install -g poetry
           poetry install
           poetry run python scripts/initialize_db.py # set up database
 
