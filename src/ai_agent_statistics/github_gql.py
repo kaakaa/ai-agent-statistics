@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 #      }
 #   ]
 # }
-DEFAULE_PER_PAGE: int = 5
+DEFAULT_PER_PAGE: int = 5
 
 search_pr_query = """
 query ($search_query: String!, $per_page: Int!, $after: String) {
