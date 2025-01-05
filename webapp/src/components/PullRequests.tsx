@@ -21,9 +21,23 @@ import useDuckDB from '../DuckDB';
 import './PullRequests.css'
 import { PullRequest } from '../types';
 
+// construct initial query from URL parameters
+const params = new URLSearchParams(window.location.search);
+const q = [];
+if (params.get('author')) q.push(`author='${params.get('author')}'`);
+if (params.get('createdAt')) q.push(`createdAt='${params.get('createdAt')}'`);
+if (params.get('state')) q.push(`state='${params.get('state')}'`);
+if (params.get('totalCommentsCount')) q.push(`totalCommentsCount=${params.get('totalCommentsCount')}`);
+if (params.get('changedFiles')) q.push(`changedFiles=${params.get('changedFiles')}`);
+if (params.get('additions')) q.push(`additions=${params.get('additions')}`);
+if (params.get('deletions')) q.push(`deletions=${params.get('deletions')}`);
+if (params.get('repository')) q.push(`repository='${params.get('repository')}'`);
+if (params.get('stargazerCount')) q.push(`stargazerCount=${params.get('stargazerCount')}`);
+if (params.get('forkCount')) q.push(`forkCount=${params.get('forkCount')}`);
+const where_clause = q.length > 0 ? `WHERE ${q.join(' AND ')}` : '';
 const basepath = import.meta.env.BASE_URL
 const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
-const DEFAULT_QUERY = `SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`;
+const DEFAULT_QUERY = `SELECT * FROM '${baseUrl}/assets/pull_request.parquet' ${where_clause}`;
 
 
 const columns: GridColDef[] = [
@@ -58,13 +72,14 @@ const columns: GridColDef[] = [
 ];
 
 function PullRequestsTable() {
-  const { db, error } = useDuckDB();
+  const {db, error} = useDuckDB();
   const [data, setData] = useState<PullRequest[]>([]);
   const [query, setQuery] = useState(DEFAULT_QUERY);
   const [inputQuery, setInputQuery] = useState(DEFAULT_QUERY);
 
   useEffect(() => {
     const load = async () => {
+      console.log(`query: ${query}`);
       if (!db) return;
 
       let conn;
