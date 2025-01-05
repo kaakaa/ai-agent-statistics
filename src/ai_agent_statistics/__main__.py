@@ -23,7 +23,7 @@ def save(store: Store, registered_repos: list, pr: PullRequest):
     except Exception as e:
         logger.error(f"Failed to update PR {pr.id}: {e}\n{pr}")
 
-def run(token: str, start_date: str = None, end_date: str = None):
+def run(token: str, authors: list[str], start_date: str = None, end_date: str = None):
     store = Store("store.db")
     client = GitHubGQLClient(token)
 
@@ -36,16 +36,18 @@ def run(token: str, start_date: str = None, end_date: str = None):
         date_query = f"created:<={end_date}"
 
     callback = partial(save, store, [])
-    for author in ["devin-ai-integration[bot]", "openhands-agent", "devloai"]:
+    for author in authors:
          client.query_pr(author, callback, additional_query=date_query)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="GitHub PR Statistics")
     parser.add_argument("--token", help="GitHub token")
+    parser.add_argument("--authors", help="Comma separated list of authors")
     parser.add_argument("--start-date", help="Start date for the query (YYYY-MM-DD)")
     parser.add_argument("--end-date", help="End date for the query (YYYY-MM-DD)")
     args = parser.parse_args()
 
     token = args.token or os.getenv("GITHUB_TOKEN")
+    authors: list[str] = args.authors.split(",") if args.authors else ["devin-ai-integration[bot]", "openhands-agent", "devloai"]
 
-    run(token, args.start_date, args.end_date)
+    run(token, authors, args.start_date, args.end_date)
