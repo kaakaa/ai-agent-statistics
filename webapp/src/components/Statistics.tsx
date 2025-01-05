@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
-import LineAdditionsPlot from './statistics/LineAdditions';
-import LineDeletionsPlot from './statistics/LineDeletions';
+import LineAdditionsPlot from './scatter/LineAdditions';
+import LineDeletionsPlot from './scatter/LineDeletions';
 
 import useDuckDB from '../DuckDB';
 import { PullRequest } from '../types';
+import LineChangesPlot from './scatter/LineChanges';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -52,6 +53,10 @@ const StatisticsPage = () => {
 
   return (
     <div>
+      <h1>Line Changes</h1>
+      <LineChangesPlot
+        pullRequests={data}
+      />
       <h1>Line Additions</h1>
       <LineAdditionsPlot
         pullRequests={data}
