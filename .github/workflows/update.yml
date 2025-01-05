@@ -45,7 +45,7 @@ jobs:
           git config --global user.name 'kaakaa'
           git config --global user.email 'stooner.hoe@gmail.com'
           git add webapp/public/assets/*
-          git commit -m Update data: $(date -u +"%Y-%m-%d")" || echo "No changes to commit"
+          git commit -m "Update data: $(date -u +'%Y-%m-%d')" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
