@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from '@mui/x-data-grid';
 import {
   AddCircleOutline,
   Comment,
@@ -132,6 +139,23 @@ function PullRequestsTable() {
             columnHeaderHeight={30}
             rows={data}
             columns={columns}
+            slots={{
+              toolbar: () => {
+                return (
+                  <GridToolbarContainer style={{ backgroundColor: '#d0d0d0' }}>
+                    <div style={{ margin: '0px 3px'}}>{`count: ${data?.length}`}</div>
+                    <GridToolbarColumnsButton />
+                    <GridToolbarFilterButton />
+                    <GridToolbarExport
+                      slotProps={{
+                        tooltip: { title: 'Export data' },
+                        button: { variant: 'outlined' },
+                      }}
+                    />
+                  </GridToolbarContainer>
+                )
+              }
+            }}
             sx={{
               '& .MuiDataGrid-cell': {
                 backgroundColor: '#f5f5f5',
