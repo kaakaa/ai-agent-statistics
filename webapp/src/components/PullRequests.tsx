@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from '@mui/x-data-grid';
 import {
   AddCircleOutline,
   Comment,
@@ -7,11 +14,31 @@ import {
   GitHub,
   RemoveCircleOutline,
 } from '@mui/icons-material';
+import Button from '@mui/material/Button';
 import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '../DuckDB';
 import './PullRequests.css'
 import { PullRequest } from '../types';
+
+// construct initial query from URL parameters
+const params = new URLSearchParams(window.location.search);
+const q = [];
+if (params.get('author')) q.push(`author='${params.get('author')}'`);
+if (params.get('createdAt')) q.push(`createdAt='${params.get('createdAt')}'`);
+if (params.get('state')) q.push(`state='${params.get('state')}'`);
+if (params.get('totalCommentsCount')) q.push(`totalCommentsCount=${params.get('totalCommentsCount')}`);
+if (params.get('changedFiles')) q.push(`changedFiles=${params.get('changedFiles')}`);
+if (params.get('additions')) q.push(`additions=${params.get('additions')}`);
+if (params.get('deletions')) q.push(`deletions=${params.get('deletions')}`);
+if (params.get('repository')) q.push(`repository='${params.get('repository')}'`);
+if (params.get('stargazerCount')) q.push(`stargazerCount=${params.get('stargazerCount')}`);
+if (params.get('forkCount')) q.push(`forkCount=${params.get('forkCount')}`);
+const where_clause = q.length > 0 ? `WHERE ${q.join(' AND ')}` : '';
+const basepath = import.meta.env.BASE_URL
+const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
+const DEFAULT_QUERY = `SELECT * FROM '${baseUrl}/assets/pull_request.parquet' ${where_clause}`;
+
 
 const columns: GridColDef[] = [
   { field: 'author', headerName: 'Author', width: 150 },
@@ -23,7 +50,7 @@ const columns: GridColDef[] = [
     </>
   )},
   { field: 'state', headerName: 'State', width: 85 },
-  { 
+  {
     field: 'title',
     headerName: 'Title',
     width: 400,
@@ -45,27 +72,48 @@ const columns: GridColDef[] = [
 ];
 
 function PullRequestsTable() {
-  const { db, error } = useDuckDB();
+  const {db, error} = useDuckDB();
   const [data, setData] = useState<PullRequest[]>([]);
+  const [query, setQuery] = useState(DEFAULT_QUERY);
+  const [inputQuery, setInputQuery] = useState(DEFAULT_QUERY);
 
   useEffect(() => {
     const load = async () => {
+      console.log(`query: ${query}`);
       if (!db) return;
 
+      let conn;
       try {
-        const conn = await db.connect();
-        const basepath = import.meta.env.BASE_URL
-        const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
-        console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
-        const result = (await conn.query(`SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`)).toArray();
+        conn = await db.connect();
+        const result = (await conn.query(query)).toArray();
         setData(result);
         console.log('success to load remote parquet file');
       } catch (error) {
         console.error('Failed to load remote Parquet file:', error);
+      } finally {
+        if (conn) await conn.close();
+        console.log('connection closed');
       }
     };
     load();
-  }, [db]);
+  }, [db, query]);
+
+  /*
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    let q = '';
+    if (params.get('additions')) q += ` additions=${params.get('additions')}`;
+    setQuery(q);
+  }, [window.location.search]);
+  */
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputQuery(e.target.value);
+  }
+
+  const handleQuerySubmit = () => {
+    setQuery(inputQuery);
+  };
 
   if (error) {
     return <div>Error initializing DuckDB: {error.message}</div>;
@@ -75,15 +123,54 @@ function PullRequestsTable() {
     return <div>Initializing DuckDB...</div>;
   }
 
+
   return (
     <>
       <h1>Pull Requests</h1>
+      <div style={{ marginBottom: '1em' }}>
+        <label
+          htmlFor="query-input"
+          style={{ marginRight: '1em' }}
+        >
+          {'SQL Query: '}
+        </label>
+        <input
+          id='query-input'
+          type="text"
+          value={inputQuery}
+          onChange={handleQueryChange}
+          style={{ width: '80%', height: '2em', marginRight: '1em' }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleQuerySubmit}
+        >
+          {'Execute'}
+        </Button>
+      </div>
       <div style={{ height: '85%', width: '100%' }}>
         <DataGrid
             rowHeight={25}
             columnHeaderHeight={30}
             rows={data}
             columns={columns}
+            slots={{
+              toolbar: () => {
+                return (
+                  <GridToolbarContainer style={{ backgroundColor: '#d0d0d0' }}>
+                    <div style={{ margin: '0px 3px'}}>{`count: ${data?.length}`}</div>
+                    <GridToolbarColumnsButton />
+                    <GridToolbarFilterButton />
+                    <GridToolbarExport
+                      slotProps={{
+                        tooltip: { title: 'Export data' },
+                        button: { variant: 'outlined' },
+                      }}
+                    />
+                  </GridToolbarContainer>
+                )
+              }
+            }}
             sx={{
               '& .MuiDataGrid-cell': {
                 backgroundColor: '#f5f5f5',
