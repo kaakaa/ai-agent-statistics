@@ -18,7 +18,7 @@ const LineChangesPlot = ({ pullRequests }: PlotProps) => {
 
   return (
     <ScatterPlot
-      label="Additoins vs Deletions"
+      label="Additions vs Deletions"
       data={data}
       pullRequests={pullRequests}
       xKey="additions"
