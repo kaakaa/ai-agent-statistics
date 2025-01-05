@@ -21,10 +21,11 @@ class Store:
         else:
             logger.info(f"Creating new database at {path}")
             self.connection = duckdb.connect(path)
-        
+
         self.connection.sql(SCHEMA_TABLE_METADATA)
         self.connection.sql(SCHEMA_TABLE_GITHUB_PULL_REQUEST)
         self.connection.sql(SCHEMA_TABLE_GITHUB_REPOSITORY)
+
 
         current_version = self.get_version()
         if current_version is None:
@@ -32,11 +33,11 @@ class Store:
         elif current_version != db_version:
             try:
                 self.connection.begin()
-                self.migrate(current_version, db_version)
+                self._migrate(current_version, db_version)
             except Exception as e:
                 self.connection.rollback()
 
-    def migrate(self, version: str, target: str):
+    def _migrate(self, version: str, target: str):
         logger.info(f"Migrating database from {version} to {target}")
         cur = int(version)
         dest = int(target)
@@ -44,7 +45,7 @@ class Store:
         if cur == 1:
             self.connection.execute("ALTER TABLE pull_request ADD COLUMN author TEXT")
             cur += 1
-        
+
         self.set_version(target)
 
     def update_pull_request(self, pr):
@@ -75,7 +76,7 @@ class Store:
                 pr.author.login
             )
         )
-    
+
     def update_repository(self, repository):
         self.connection.execute(
             f"""INSERT INTO repository VALUES (?, ?, ?, ?)
@@ -96,7 +97,7 @@ class Store:
         if ret is None:
             return None
         return ret[1]
-    
+
     def set_version(self, version: str):
         self.connection.execute(f"""
             INSERT INTO metadata VALUES ('version', '{version}')
