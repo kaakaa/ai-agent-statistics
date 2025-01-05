@@ -46,7 +46,7 @@ const SummaryPage = () => {
     <div>
       <h1>Pull Requests by AI-Agent</h1>
       <PullRequestsCountChart prCounts={prCounts} />
-      <h1>Repository usgin AI-Agent</h1>
+      <h1>Repository using AI-Agent</h1>
       <ReposCountChart prCounts={prCounts} />
     </div>
   );
