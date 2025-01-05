@@ -28,7 +28,8 @@ const StatisticsPage = () => {
 
       try {
         const conn = await db.connect();
-        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`.replace(/\/$/, '');
+        const basepath = import.meta.env.BASE_URL
+        const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
         console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
         const result = (await conn.query(`SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`)).toArray();
         setData(result);
