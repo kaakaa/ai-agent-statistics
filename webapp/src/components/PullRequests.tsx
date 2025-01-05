@@ -11,19 +11,7 @@ import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '../DuckDB';
 import './PullRequests.css'
-
-type PullRequest = {
-    id: string;
-    title: string;
-    url: string;
-    createdAt: string;
-    state: string;
-    totalCommentsCount: number;
-    additions: number;
-    deletions: number;
-    changedFiles: number;
-    repositoryId: string;
-}
+import { PullRequest } from '../types';
 
 const columns: GridColDef[] = [
   { field: 'author', headerName: 'Author', width: 150 },

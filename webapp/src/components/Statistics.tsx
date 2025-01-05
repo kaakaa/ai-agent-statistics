@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
-import { PRCount } from '../types';
-import PullRequestsCountChart from './statistics/PullRequestsCount';
-import ReposCountChart from './statistics/ReposCount';
+import LineAdditionsPlot from './statistics/LineAdditions';
+
+import useDuckDB from '../DuckDB';
+import { PullRequest } from '../types';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -18,36 +19,41 @@ export type ChartDataType = {
 }
 
 const StatisticsPage = () => {
-  const [prCounts, setPrCounts] = useState<PRCount[]>([]);
+  const { db, error } = useDuckDB();
+  const [data, setData] = useState<PullRequest[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const basepath = import.meta.env.BASE_URL
-      const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
-      console.log(`fetch pr_counts_by_date.csv from baseUrl: ${baseUrl}`);
-      const resp = await fetch(`${baseUrl}/assets/pr_counts_by_date.csv`);
+    const load = async () => {
+      if (!db) return;
 
-      const csv = await resp.text();
-      const prCounts: PRCount[]= csv.split('\n').slice(1).map(row => {
-        const values = row.split(',');
-        return {
-            date: values[0],
-            author: values[1],
-            count: parseInt(values[2], 10),
-            repos: parseInt(values[3], 10),
-        }
-      });
-      setPrCounts(prCounts);
+      try {
+        const conn = await db.connect();
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`.replace(/\/$/, '');
+        console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
+        const result = (await conn.query(`SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`)).toArray();
+        setData(result);
+        console.log('success to load remote parquet file');
+      } catch (error) {
+        console.error('Failed to load remote Parquet file:', error);
+      }
     };
-    fetchData();
-  }, []);
+    load();
+  }, [db]);
+
+  if (error) {
+    return <div>Error initializing DuckDB: {error.message}</div>;
+  }
+
+  if (!db) {
+    return <div>Initializing DuckDB...</div>;
+  }
 
   return (
     <div>
-      <h1>PR Count by Date</h1>
-      <PullRequestsCountChart prCounts={prCounts} />
-      <h1>Repos Count by Date</h1>
-      <ReposCountChart prCounts={prCounts} />
+      <h1>Line Additions</h1>
+      <LineAdditionsPlot
+        pullRequests={data}
+      />
     </div>
   );
 };
