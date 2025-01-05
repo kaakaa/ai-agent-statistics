@@ -4,10 +4,10 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 
 const Header: React.FC = () => {
   return (
-    <nav style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px', backgroundColor: '#343a40'}}>
+    <nav style={{ display: 'flex', justifyContent: 'flex-end', position: 'fixed', 'top': 0, 'width': '100%', padding: '10px', backgroundColor: '#343a40'}}>
       <ul style={{ display: 'flex', listStyle: 'none', margin: 0, padding: 0 }}>
       <li style={{ margin: '0 10px' }}>
-        <Link to="/" style={{ textDecoration: 'none', color: '#ffffff' }}>Home</Link>
+        <Link to="/" style={{ textDecoration: 'none', color: '#ffffff' }}>Summary</Link>
       </li>
       <li style={{ margin: '0 10px' }}>
         <Link to="/statistics" style={{ textDecoration: 'none', color: '#ffffff' }}>Statistics</Link>

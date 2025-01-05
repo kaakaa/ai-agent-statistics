@@ -12,7 +12,7 @@ const base = import.meta.env.BASE_URL
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router basename={base}>
-      <Header />
+      <Header/>
       <Routes>
         <Route path="/" element={<SummaryPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
