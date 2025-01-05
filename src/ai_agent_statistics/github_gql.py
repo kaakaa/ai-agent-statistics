@@ -15,9 +15,11 @@ logger = logging.getLogger(__name__)
 #      }
 #   ]
 # }
-search_pr_query = query = """
-query ($search_query: String!, $after: String) {
-    search(query: $search_query, type: ISSUE, first: 5, after:$after) {
+DEFAULT_PER_PAGE: int = 5
+
+search_pr_query = """
+query ($search_query: String!, $per_page: Int!, $after: String) {
+    search(query: $search_query, type: ISSUE, first: $per_page, after:$after) {
         issueCount
         edges {
             node {
@@ -61,25 +63,30 @@ class GitHubGQLClient:
         }
     
     def query_pr(self, author_name: str, callback, additional_query: str | None = None) -> None:
-        has_next_page = True
-        after_cursor = None
-        total_issue_count = -1
-        count = 0
+        has_next_page: bool = True
+        after_cursor: str | None = None
+        per_page: int = DEFAULE_PER_PAGE
+        num_of_req: int = 0
+        total_issue_count: int = -1
 
         while has_next_page:
-            logger.info(f"[{count+1}/{total_issue_count}] Querying PRs for '{author_name}' after '{after_cursor}'")
+            logger.info(f"[{(num_of_req)*per_page}/{total_issue_count}] Querying PRs for '{author_name}' after '{after_cursor}'")
             variables = {
                 "search_query": f"author:{author_name} type:pr {additional_query}",
+                "per_page": per_page,
                 "after": after_cursor
             }
 
             response = requests.post(
                 "https://api.github.com/graphql",
-                json={"query": search_pr_query, "variables": variables},
+                json={
+                    "query": search_pr_query,
+                    "variables": variables,
+                },
                 headers=self.headers
             )
 
-            count += 1
+            num_of_req += 1
 
             if response.status_code == 200:
                 ret = response.json()
