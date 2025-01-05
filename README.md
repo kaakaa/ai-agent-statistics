@@ -13,7 +13,8 @@ $ poetry run python src/ai_agent_statistics/__main__.py --token=github_pat_... -
 => store and update data to ./store.db
 
 # Transform data to web readable format
-$ duckdb store.db < sql/to_parquet.sql
+$ duckdb store.db < sql/pr_parquet.sql
+$ duckdb store.db < sql/repo_parquet.sql
 $ duckdb store.db < sql/pr_counts_by_date.sql
 
 # Build and start webapp

@@ -37,7 +37,7 @@ if (params.get('forkCount')) q.push(`forkCount=${params.get('forkCount')}`);
 const where_clause = q.length > 0 ? `WHERE ${q.join(' AND ')}` : '';
 const basepath = import.meta.env.BASE_URL
 const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
-const DEFAULT_QUERY = `SELECT * FROM '${baseUrl}/assets/pull_request.parquet' ${where_clause}`;
+const DEFAULT_QUERY = `SELECT * FROM '${baseUrl}/assets/pull_request.parquet' AS p JOIN '${baseUrl}/assets/repository.parquet' AS r ON p.repositoryId = r.id ${where_clause}`;
 
 
 const columns: GridColDef[] = [
@@ -107,7 +107,7 @@ function PullRequestsTable() {
   }, [window.location.search]);
   */
 
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputQuery(e.target.value);
   }
 
@@ -128,25 +128,37 @@ function PullRequestsTable() {
     <>
       <h1>Pull Requests</h1>
       <div style={{ marginBottom: '1em' }}>
-        <label
-          htmlFor="query-input"
-          style={{ marginRight: '1em' }}
-        >
-          {'SQL Query: '}
-        </label>
-        <input
-          id='query-input'
-          type="text"
-          value={inputQuery}
-          onChange={handleQueryChange}
-          style={{ width: '80%', height: '2em', marginRight: '1em' }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleQuerySubmit}
-        >
-          {'Execute'}
-        </Button>
+        <div>
+          <label
+            htmlFor="query-input"
+            style={{
+              marginRight: '1em',
+            }}
+          >
+            {'SQL Query: '}
+          </label>
+        </div>
+        <div>
+          <textarea
+            id='query-input'
+            value={inputQuery}
+            onChange={handleQueryChange}
+            style={{
+              width: '80%',
+              height: '4em',
+              marginRight: '1em',
+              padding: '0.5em',
+              resize: 'vertical',
+              fontFamily: 'monospace',
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={handleQuerySubmit}
+          >
+            {'Execute'}
+          </Button>
+        </div>
       </div>
       <div style={{ height: '85%', width: '100%' }}>
         <DataGrid
