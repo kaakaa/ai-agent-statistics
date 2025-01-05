@@ -39,7 +39,7 @@ const SummaryPage = () => {
       });
       setPrCounts(prCounts);
     };
-    fetchData();
+    fetchData().catch(error => console.error('Error fetching data:', error));
   }, []);
 
   return (
