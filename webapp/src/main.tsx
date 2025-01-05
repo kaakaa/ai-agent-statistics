@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router';
 import './index.css'
 import PullRequestsTable from './components/PullRequests.tsx'
 import StatisticsPage from './components/Statistics.tsx';
+import SummaryPage from './components/Summary.tsx';
 
 const base = import.meta.env.BASE_URL
 
@@ -11,8 +12,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router basename={base}>
       <Routes>
-        <Route path="/" element={<PullRequestsTable />} />
-        <Route path="/chart" element={<StatisticsPage />} />
+        <Route path="/" element={<SummaryPage />} />
+        <Route path="/statistics" element={<StatisticsPage />} />
+        <Route path="/details" element={<PullRequestsTable />} />
       </Routes>
     </Router>
   </StrictMode>,

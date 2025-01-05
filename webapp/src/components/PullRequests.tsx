@@ -11,19 +11,7 @@ import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '../DuckDB';
 import './PullRequests.css'
-
-type PullRequest = {
-    id: string;
-    title: string;
-    url: string;
-    createdAt: string;
-    state: string;
-    totalCommentsCount: number;
-    additions: number;
-    deletions: number;
-    changedFiles: number;
-    repositoryId: string;
-}
+import { PullRequest } from '../types';
 
 const columns: GridColDef[] = [
   { field: 'author', headerName: 'Author', width: 150 },
@@ -66,7 +54,8 @@ function PullRequestsTable() {
 
       try {
         const conn = await db.connect();
-        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`.replace(/\/$/, '');
+        const basepath = import.meta.env.BASE_URL
+        const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
         console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
         const result = (await conn.query(`SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`)).toArray();
         setData(result);
