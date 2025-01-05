@@ -16,7 +16,7 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
             python-version: '3.12'
@@ -27,7 +27,7 @@ jobs:
           poetry install
           poetry run python scripts/initialize_db.py # set up database
 
-      - name: Build the static site
+      - name: Fetch data
         run: |
           CURRENT_DATE=$(date -u +"%Y-%m-%d")
           LAST_WEEK=$(date -u -d "7 days ago" +"%Y-%m-%d")
@@ -38,7 +38,7 @@ jobs:
 
       - name: Export result data
         run: |
-          poetry run python scripts/export_data.py
+          poetry run python scripts/export_db.py
     
       - name: Commit and push changes
         run: |
