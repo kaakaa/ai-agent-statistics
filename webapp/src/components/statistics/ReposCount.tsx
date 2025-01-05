@@ -20,7 +20,7 @@ const ReposCountChart = ({prCounts}: ChartProps) => {
     if (!dates || dates.length === 0) {
         return <div>No data</div>
     }
-    const begin = new Date(dates.sort((a, b) => a.localeCompare(b))[0]);
+    let begin = new Date(dates.sort((a, b) => a.localeCompare(b))[0]);
     const end = new Date(dates.sort((a, b) => b.localeCompare(a))[0]);
 
     const labels = [begin.toISOString().split('T')[0]];
