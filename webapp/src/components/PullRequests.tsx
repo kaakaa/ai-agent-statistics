@@ -76,6 +76,7 @@ function PullRequestsTable() {
   const [data, setData] = useState<PullRequest[]>([]);
   const [query, setQuery] = useState(DEFAULT_QUERY);
   const [inputQuery, setInputQuery] = useState(DEFAULT_QUERY);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -88,8 +89,9 @@ function PullRequestsTable() {
         const result = (await conn.query(query)).toArray();
         setData(result);
         console.log('success to load remote parquet file');
-      } catch (error) {
-        console.error('Failed to load remote Parquet file:', error);
+      } catch (e: any) {
+        console.error('Failed to load remote Parquet file:', e);
+        setLoadError(e?.message);
       } finally {
         if (conn) await conn.close();
         console.log('connection closed');
@@ -121,6 +123,15 @@ function PullRequestsTable() {
 
   if (!db) {
     return <div>Initializing DuckDB...</div>;
+  }
+
+  if (loadError) {
+    const e = loadError;
+    setLoadError(null);
+    return <>
+      <p>{`Failed to load data: ${e}`}</p>
+      <p>{'Please reload.'}</p>
+    </>
   }
 
 
