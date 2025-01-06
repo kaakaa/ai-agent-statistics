@@ -126,8 +126,10 @@ function PullRequestsTable() {
   }
 
   if (loadError) {
+    const e = loadError;
+    setLoadError(null);
     return <>
-      <p>{`Failed to load remote parquet: ${loadError}`}</p>
+      <p>{`Failed to load data: ${e}`}</p>
       <p>{'Please reload.'}</p>
     </>
   }
