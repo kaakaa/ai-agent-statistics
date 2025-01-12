@@ -28,6 +28,7 @@ SWE_AI_AGENTS = [
         "url": "https://sweep.dev/"
     },
     {
+        # For now, "gru-agent-dev[bot]" and "gru-agent-staging[bot]" are not included in the list
         "name": "gru-agent[bot]",
         "url": "https://gru.ai/"
     },
