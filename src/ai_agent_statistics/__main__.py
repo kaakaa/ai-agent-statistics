@@ -76,6 +76,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     token = args.token or os.getenv("GITHUB_TOKEN")
-    authors: list[str] = args.authors.split(",") if args.authors else [a.name for a in SWE_AI_AGENTS]
+    authors: list[str] = args.authors.split(",") if args.authors else [a['name'] for a in SWE_AI_AGENTS]
 
     run(token, authors, args.start_date, args.end_date)
