@@ -10,6 +10,34 @@ from ai_agent_statistics.store import Store
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=os.sys.stdout, level=logging.INFO)
 
+SWE_AI_AGENTS = [
+    {
+        "name": "devin-ai-integration[bot]",
+        "url": "https://devin.ai/"
+    },
+    {
+        "name": "openhands-agent",
+        "url": "https://docs.all-hands.dev/"
+    },
+    {
+        "name": "devloai",
+        "url": "https://devlo.ai/"
+    },
+    {
+        "name": "sweep-ai[bot]",
+        "url": "https://sweep.dev/"
+    },
+    {
+        # For now, "gru-agent-dev[bot]" and "gru-agent-staging[bot]" are not included in the list
+        "name": "gru-agent[bot]",
+        "url": "https://gru.ai/"
+    },
+    {
+        "name": "code-rover-bot[bot]",
+        "url": "https://autocoderover.dev/"
+    }
+]
+
 def save(store: Store, registered_repos: list, pr: PullRequest):
     try:
         logger.debug(f"Updating PR {pr.id}")
@@ -48,6 +76,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     token = args.token or os.getenv("GITHUB_TOKEN")
-    authors: list[str] = args.authors.split(",") if args.authors else ["devin-ai-integration[bot]", "openhands-agent", "devloai"]
+    authors: list[str] = args.authors.split(",") if args.authors else [a['name'] for a in SWE_AI_AGENTS]
 
     run(token, authors, args.start_date, args.end_date)
