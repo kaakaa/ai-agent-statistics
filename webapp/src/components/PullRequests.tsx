@@ -100,15 +100,6 @@ function PullRequestsTable() {
     load();
   }, [db, query]);
 
-  /*
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    let q = '';
-    if (params.get('additions')) q += ` additions=${params.get('additions')}`;
-    setQuery(q);
-  }, [window.location.search]);
-  */
-
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputQuery(e.target.value);
   }
