@@ -4,6 +4,11 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { Help } from '@mui/icons-material';
+import { Tooltip, IconButton } from '@mui/material';
+
+import { DataSchemaDescription, getWhereClauseBySearchParams } from '@/components/data/DataSchema';
+
 
 type DataQueryProps = {
   query?: string;
@@ -12,19 +17,7 @@ type DataQueryProps = {
 
 const constructDefaultQuery = (): string => {
   const params = new URLSearchParams(window.location.search);
-  const q = [];
-  if (params.get('author')) q.push(`author='${params.get('author')}'`);
-  if (params.get('createdAt')) q.push(`createdAt like '${params.get('createdAt')}%'`);
-  if (params.get('state')) q.push(`state='${params.get('state')}'`);
-  if (params.get('totalCommentsCount')) q.push(`totalCommentsCount=${params.get('totalCommentsCount')}`);
-  if (params.get('changedFiles')) q.push(`changedFiles=${params.get('changedFiles')}`);
-  if (params.get('additions')) q.push(`additions=${params.get('additions')}`);
-  if (params.get('deletions')) q.push(`deletions=${params.get('deletions')}`);
-  if (params.get('repository')) q.push(`repository='${params.get('repository')}'`);
-  if (params.get('stargazerCount')) q.push(`stargazerCount=${params.get('stargazerCount')}`);
-  if (params.get('forkCount')) q.push(`forkCount=${params.get('forkCount')}`);
-  const where_clause = q.length > 0 ? `WHERE ${q.join(' AND ')}` : '';
-
+  const whereClause = getWhereClauseBySearchParams(params);
   const basepath = import.meta.env.BASE_URL
   const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
 
@@ -32,7 +25,7 @@ const constructDefaultQuery = (): string => {
     FROM '${baseUrl}/assets/pull_request.parquet' AS p
     JOIN '${baseUrl}/assets/repository.parquet' AS r
     ON p.repositoryId = r.id
-    ${where_clause};
+    ${whereClause};
   `;
 }
 
@@ -83,6 +76,18 @@ export default function DataQuery({ query, onQuerySubmit }: DataQueryProps) {
           <Typography variant="h6" component="span">
             SQL Query
           </Typography>
+          <Tooltip
+            title={<pre style={{ whiteSpace: 'pre-wrap' }}>{DataSchemaDescription}</pre>}
+            placement="right"
+            arrow
+          >
+            <IconButton size="small">
+              <Help sx={{
+                fontSize: '1.2rem',
+                color: '#1976d2'
+              }} />
+            </IconButton>
+          </Tooltip>
           {isExpanded ?
             <ExpandLess sx={{ color: '#1976d2' }} /> :
             <ExpandMore sx={{ color: '#1976d2' }} />
