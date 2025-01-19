@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 type DataQueryProps = {
   query?: string;
@@ -33,13 +36,23 @@ const constructDefaultQuery = (): string => {
   `;
 }
 
+const StyledLabel = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5em',
+  fontWeight: 600,
+  fontSize: '1.1em',
+  color: '#1976d2',  // Material-UI primary blue
+  padding: '0.5em 0',
+});
+
 export default function DataQuery({ query, onQuerySubmit }: DataQueryProps) {
   const [inputQuery, setInputQuery] = useState(query || constructDefaultQuery());
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  // Run default query at opening
   useEffect(() => {
     onQuerySubmit(inputQuery);
-  }, [])
+  }, []);
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputQuery(e.target.value);
@@ -56,43 +69,54 @@ export default function DataQuery({ query, onQuerySubmit }: DataQueryProps) {
       alignItems: 'flex-start',
       width: '100%'
     }}>
-      <div>
-        <label
-          htmlFor="query-input"
-          style={{
-            display: 'block',
-            marginBottom: '0.5em',
-          }}
-        >
-          {'SQL Query: '}
-        </label>
+      <div
+        onClick={() => setIsExpanded(!isExpanded)}
+        style={{
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          marginBottom: '0.5em'
+        }}
+      >
+        <StyledLabel>
+          <Typography variant="h6" component="span">
+            SQL Query
+          </Typography>
+          {isExpanded ?
+            <ExpandLess sx={{ color: '#1976d2' }} /> :
+            <ExpandMore sx={{ color: '#1976d2' }} />
+          }
+        </StyledLabel>
       </div>
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'flex-end',
-        gap: '1em',
-        marginBottom: '15px',
-      }}>
-        <textarea
-          id='query-input'
-          value={inputQuery}
-          onChange={handleQueryChange}
-          style={{
-            width: '100%',
-            height: '7em',
-            padding: '0.5em',
-            resize: 'vertical',
-            fontFamily: 'monospace',
-          }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleQuerySubmit}
-        >
-          {'Execute'}
-        </Button>
-      </div>
+      {isExpanded && (
+        <div style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: '1em',
+          marginBottom: '15px',
+        }}>
+          <textarea
+            id='query-input'
+            value={inputQuery}
+            onChange={handleQueryChange}
+            style={{
+              width: '100%',
+              height: '7em',
+              padding: '0.5em',
+              resize: 'vertical',
+              fontFamily: 'monospace',
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={handleQuerySubmit}
+          >
+            Execute
+          </Button>
+        </div>
+      )}
     </div>
-  )
+  );
 }
