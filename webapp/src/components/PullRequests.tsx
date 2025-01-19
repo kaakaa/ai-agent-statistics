@@ -14,31 +14,12 @@ import {
   GitHub,
   RemoveCircleOutline,
 } from '@mui/icons-material';
-import Button from '@mui/material/Button';
 import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '@/DuckDB';
 import '@/components/PullRequests.css'
+import DataQuery from '@/components/data/data_query';
 import { PullRequest } from '@/types';
-
-// construct initial query from URL parameters
-const params = new URLSearchParams(window.location.search);
-const q = [];
-if (params.get('author')) q.push(`author='${params.get('author')}'`);
-if (params.get('createdAt')) q.push(`createdAt like '${params.get('createdAt')}%'`);
-if (params.get('state')) q.push(`state='${params.get('state')}'`);
-if (params.get('totalCommentsCount')) q.push(`totalCommentsCount=${params.get('totalCommentsCount')}`);
-if (params.get('changedFiles')) q.push(`changedFiles=${params.get('changedFiles')}`);
-if (params.get('additions')) q.push(`additions=${params.get('additions')}`);
-if (params.get('deletions')) q.push(`deletions=${params.get('deletions')}`);
-if (params.get('repository')) q.push(`repository='${params.get('repository')}'`);
-if (params.get('stargazerCount')) q.push(`stargazerCount=${params.get('stargazerCount')}`);
-if (params.get('forkCount')) q.push(`forkCount=${params.get('forkCount')}`);
-const where_clause = q.length > 0 ? `WHERE ${q.join(' AND ')}` : '';
-const basepath = import.meta.env.BASE_URL
-const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
-const DEFAULT_QUERY = `SELECT * FROM '${baseUrl}/assets/pull_request.parquet' AS p JOIN '${baseUrl}/assets/repository.parquet' AS r ON p.repositoryId = r.id ${where_clause}`;
-
 
 const columns: GridColDef[] = [
   { field: 'author', headerName: 'Author', width: 150 },
@@ -74,8 +55,7 @@ const columns: GridColDef[] = [
 function PullRequestsTable() {
   const {db, error} = useDuckDB();
   const [data, setData] = useState<PullRequest[]>([]);
-  const [query, setQuery] = useState(DEFAULT_QUERY);
-  const [inputQuery, setInputQuery] = useState(DEFAULT_QUERY);
+  const [query, setQuery] = useState('');
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -100,12 +80,8 @@ function PullRequestsTable() {
     load();
   }, [db, query]);
 
-  const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputQuery(e.target.value);
-  }
-
-  const handleQuerySubmit = () => {
-    setQuery(inputQuery);
+  const onQuerySubmit = (submittedQuery: string) => {
+    setQuery(submittedQuery);
   };
 
   if (error) {
@@ -125,44 +101,13 @@ function PullRequestsTable() {
     </>
   }
 
-
   return (
     <>
       <h1>Pull Requests</h1>
-      <div style={{ marginBottom: '1em' }}>
-        <div>
-          <label
-            htmlFor="query-input"
-            style={{
-              marginRight: '1em',
-            }}
-          >
-            {'SQL Query: '}
-          </label>
-        </div>
-        <div>
-          <textarea
-            id='query-input'
-            value={inputQuery}
-            onChange={handleQueryChange}
-            style={{
-              width: '80%',
-              height: '4em',
-              marginRight: '1em',
-              padding: '0.5em',
-              resize: 'vertical',
-              fontFamily: 'monospace',
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleQuerySubmit}
-          >
-            {'Execute'}
-          </Button>
-        </div>
+      <div>
+        <DataQuery onQuerySubmit={onQuerySubmit} />
       </div>
-      <div style={{ height: '85%', width: '100%' }}>
+      <div style={{ height: '100vh', width: '100%', minHeight: '90vh' }}>
         <DataGrid
             rowHeight={25}
             columnHeaderHeight={30}
