@@ -18,7 +18,7 @@ import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '@/DuckDB';
 import '@/components/PullRequests.css'
-import DataQuery from '@/components/data/data_query';
+import DataQuery from '@/components/data/DataQuery';
 import { PullRequest } from '@/types';
 
 const columns: GridColDef[] = [

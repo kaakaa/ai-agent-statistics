@@ -8,7 +8,7 @@ import useDuckDB from '@/DuckDB';
 import { PullRequest } from '@/types';
 import LineChangesPlot from '@/components/scatter/LineChanges';
 import { getBaseUrl } from '@/utils';
-import DataQuery from './data/data_query';
+import DataQuery from './data/DataQuery';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
