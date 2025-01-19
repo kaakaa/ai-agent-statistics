@@ -1,6 +1,6 @@
 import { Line } from 'react-chartjs-2';
 
-import { PRCount } from '../../types';
+import { PRCount } from '@/types';
 
 type ChartProps = {
     prCounts: PRCount[];
