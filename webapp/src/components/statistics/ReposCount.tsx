@@ -7,15 +7,18 @@ type ChartProps = {
     prCounts: PRCount[];
 }
 
-const ReposCountChart = ({prCounts}: ChartProps) => {
-    const authors = [
-        {name: "devin-ai-integration", color: 'rgba(0, 180, 170, 1)'},
-        {name: "devloai", color: 'rgba(0, 122, 255, 1)'},
-        {name: "openhands-agent", color: 'rgba(255, 204, 0, 1)'},
-        {name: "gru-agent", color: 'rgba(255, 99, 132, 1)'},
-        {name: "code-rover-bot", color: 'rgba(54, 162, 235, 1)'},
-    ];
+export const authorColors = [
+  {name: "devin-ai-integration", color: 'rgba(0, 180, 170, 1)'},
+  {name: "devloai", color: 'rgba(0, 122, 255, 1)'},
+  {name: "openhands-agent", color: 'rgba(255, 204, 0, 1)'},
+  {name: "gru-agent", color: 'rgba(192, 99, 132, 1)'},
+  {name: "gru-agent-dev", color: 'rgba(128, 99, 132, 1)'},
+  {name: "gru-agent-staging", color: 'rgba(255, 99, 132, 1)'},
+  {name: "code-rover-bot", color: 'rgba(54, 162, 235, 1)'},
+  {name: "sweep-ai", color: 'rgba(153, 102, 255, 1)'},
+];
 
+const ReposCountChart = ({prCounts}: ChartProps) => {
     const dates = Array.from(new Set(prCounts.map((prCount: PRCount) => prCount.date).filter(date => date)));
     if (!dates || dates.length === 0) {
         return <div>No data</div>
@@ -29,7 +32,7 @@ const ReposCountChart = ({prCounts}: ChartProps) => {
         labels.push(begin.toISOString().split('T')[0]);
     }
 
-    const datasets = authors.map(author => {
+    const datasets = authorColors.map(author => {
         const countsByAuthor = prCounts.filter((prCount: any) => prCount.author === author.name)
         const counts = labels.map(date => countsByAuthor.find((c: PRCount) => c.date === date)?.repos || 0);
         return {
