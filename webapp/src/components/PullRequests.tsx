@@ -113,6 +113,11 @@ function PullRequestsTable() {
             columnHeaderHeight={30}
             rows={data}
             columns={columns}
+            initialState={{
+              sorting: {
+                sortModel: [{ field: 'createdAt', sort: 'desc' }],
+              },
+            }}
             slots={{
               toolbar: () => {
                 return (
