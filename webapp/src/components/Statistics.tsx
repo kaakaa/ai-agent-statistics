@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
-import LineAdditionsPlot from './scatter/LineAdditions';
-import LineDeletionsPlot from './scatter/LineDeletions';
+import LineAdditionsPlot from '@/components/scatter/LineAdditions';
+import LineDeletionsPlot from '@/components/scatter/LineDeletions';
 
-import useDuckDB from '../DuckDB';
-import { PullRequest } from '../types';
-import LineChangesPlot from './scatter/LineChanges';
+import useDuckDB from '@/DuckDB';
+import { PullRequest } from '@/types';
+import LineChangesPlot from '@/components/scatter/LineChanges';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
