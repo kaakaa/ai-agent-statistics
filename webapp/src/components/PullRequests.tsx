@@ -18,7 +18,7 @@ import Button from '@mui/material/Button';
 import { blue, red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import useDuckDB from '@/DuckDB';
-import './PullRequests.css'
+import '@/components/PullRequests.css'
 import { PullRequest } from '@/types';
 
 // construct initial query from URL parameters
