@@ -1,5 +1,5 @@
-import ScatterPlot from './ScatterPlot';
-import { PullRequest } from '../../types';
+import ScatterPlot from '@/components/scatter/ScatterPlot';
+import { PullRequest } from '@/types';
 
 type PlotProps = {
   pullRequests: PullRequest[];
