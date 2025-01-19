@@ -2,6 +2,8 @@
 
 # AI Agent Statistics
 
+[AI\-Agent Statistics](https://kaakaa.github.io/ai-agent-statistics/)
+
 Collect PullRequest create by AI Agents, and view statistics for that.
 
 | Summary | Statistics | Details |
