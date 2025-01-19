@@ -1,6 +1,8 @@
 import { Scatter } from 'react-chartjs-2';
 import { Chart, LogarithmicScale } from 'chart.js';
 
+import { getBaseUrl } from '@/utils';
+
 Chart.register(LogarithmicScale);
 
 type PlotPoint = {
@@ -16,9 +18,6 @@ type ScatterPlotProps = {
   yKey: string;
   backgroundColor: string;
 }
-
-const basepath = import.meta.env.BASE_URL
-const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
 
 const ScatterPlot = ({ label, data, pullRequests, xKey, yKey, backgroundColor }: ScatterPlotProps) => {
   const chartData = {
@@ -72,7 +71,7 @@ const ScatterPlot = ({ label, data, pullRequests, xKey, yKey, backgroundColor }:
             const searchParams = new URLSearchParams();
             searchParams.set(xKey, plot.x.toString());
             searchParams.set(yKey, plot.y.toString());
-            const href = `${baseUrl}/details?${searchParams.toString()}`;
+            const href = `${getBaseUrl()}/details?${searchParams.toString()}`;
 
             window.location.href = href;
           }

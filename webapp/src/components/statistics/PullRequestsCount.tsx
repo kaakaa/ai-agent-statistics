@@ -1,13 +1,11 @@
 import { Line } from 'react-chartjs-2';
 
 import { PRCount } from '@/types';
+import { getBaseUrl } from '@/utils';
 
 type ChartProps = {
     prCounts: PRCount[];
 }
-
-const basepath = import.meta.env.BASE_URL
-const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
 
 const PullRequestsCountChart = ({prCounts}: ChartProps) => {
     const authors = [
@@ -56,7 +54,7 @@ const PullRequestsCountChart = ({prCounts}: ChartProps) => {
 
                     const searchParams = new URLSearchParams();
                     searchParams.set('createdAt', date);
-                    const href = `${baseUrl}/details?${searchParams.toString()}`;
+                    const href = `${getBaseUrl()}/details?${searchParams.toString()}`;
 
                     window.location.href = href;
                   }

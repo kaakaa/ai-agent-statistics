@@ -8,6 +8,7 @@ import { Help } from '@mui/icons-material';
 import { Tooltip, IconButton } from '@mui/material';
 
 import { DataSchemaDescription, getWhereClauseBySearchParams } from '@/components/data/DataSchema';
+import { getBaseUrl } from '@/utils';
 
 
 type DataQueryProps = {
@@ -18,8 +19,7 @@ type DataQueryProps = {
 const constructDefaultQuery = (): string => {
   const params = new URLSearchParams(window.location.search);
   const whereClause = getWhereClauseBySearchParams(params);
-  const basepath = import.meta.env.BASE_URL
-  const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
+  const baseUrl = getBaseUrl();
 
   return `SELECT *
     FROM '${baseUrl}/assets/pull_request.parquet' AS p

@@ -10,7 +10,7 @@ export const DataSchema: DataElement[] = [
   { name: 'author', type: 'TEXT', displayName: 'Author', description: 'PR creator' },
   { name: 'title', type: 'TEXT', displayName: 'Title', description: 'PR title' },
   { name: 'url', type: 'TEXT', displayName: 'URL', description: 'URL of PR' },
-  { name: 'createdAt', type: 'TEXT', displayName: 'Created At', description: 'PR created at (YYYY-MM-DD)' },
+  { name: 'createdAt', type: 'DATE', displayName: 'Created At', description: 'PR created at (YYYY-MM-DD)' },
   { name: 'state', type: 'TEXT', displayName: 'State', description: 'PR state' },
   { name: 'totalCommentsCount', type: 'INTEGER', displayName: 'Total Comments Count', description: 'num of comments in PR' },
   { name: 'changedFiles', type: 'INTEGER', displayName: 'Changed Files', description: 'num of changed files by PR' },
@@ -29,9 +29,11 @@ export const getWhereClauseBySearchParams = (params: URLSearchParams): string =>
   const p = DataSchema.reduce((acc, e) => {
     if (params.get(e.name)) {
       if (e.type === 'TEXT') {
-        acc.push(`${e.name}='${params.get(e.name)}'`);
+        acc.push(`${e.name} = '${params.get(e.name)}'`);
+      } else if (e.type === 'DATE') {
+        acc.push(`${e.name} like '${params.get(e.name)}%'`);
       } else {
-        acc.push(`${e.name}=${params.get(e.name)}`);
+        acc.push(`${e.name} = ${params.get(e.name)}`);
       }
     }
     return acc;

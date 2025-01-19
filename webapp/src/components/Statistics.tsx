@@ -7,6 +7,7 @@ import LineDeletionsPlot from '@/components/scatter/LineDeletions';
 import useDuckDB from '@/DuckDB';
 import { PullRequest } from '@/types';
 import LineChangesPlot from '@/components/scatter/LineChanges';
+import { getBaseUrl } from '@/utils';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -30,11 +31,12 @@ const StatisticsPage = () => {
 
       try {
         const conn = await db.connect();
-        const basepath = import.meta.env.BASE_URL
-        const baseUrl = `${window.location.protocol}//${window.location.host}${basepath}`.replace(/\/$/, '');
+        const baseUrl = getBaseUrl();
         console.log(`fetch pull_request.parquet from baseUrl: ${baseUrl}`);
+
         const result = (await conn.query(`SELECT * FROM '${baseUrl}/assets/pull_request.parquet'`)).toArray();
         setData(result);
+
         console.log('success to load remote parquet file');
       } catch (error) {
         console.error('Failed to load remote Parquet file:', error);
