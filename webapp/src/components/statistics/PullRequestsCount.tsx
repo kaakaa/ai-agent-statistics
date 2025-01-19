@@ -14,6 +14,7 @@ const PullRequestsCountChart = ({prCounts}: ChartProps) => {
         {name: "openhands-agent", color: 'rgba(255, 204, 0, 1)'},
         {name: "gru-agent", color: 'rgba(255, 99, 132, 1)'},
         {name: "code-rover-bot", color: 'rgba(54, 162, 235, 1)'},
+        {name: "sweep-ai", color: 'rgba(153, 102, 255, 1)'},
     ];
 
     const dates = Array.from(new Set(prCounts.map((prCount: PRCount) => prCount.date).filter(date => date)));
