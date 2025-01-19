@@ -1,6 +1,12 @@
+[![Update data](https://github.com/kaakaa/ai-agent-statistics/actions/workflows/update.yml/badge.svg)](https://github.com/kaakaa/ai-agent-statistics/actions/workflows/update.yml) [![Deploy to GitHub Pages](https://github.com/kaakaa/ai-agent-statistics/actions/workflows/deploy.yml/badge.svg)](https://github.com/kaakaa/ai-agent-statistics/actions/workflows/deploy.yml)
+
 # AI Agent Statistics
 
 Collect PullRequest create by AI Agents, and view statistics for that.
+
+| Summary | Statistics | Details |
+|:-:|:-:|:-:|
+| [![](./assets/view_summary.png)](./assets/view_summary.png) | [![](./assets/view_statistics.png)](./assets/view_statistics.png) |[![](./assets/view_details.png)](./assets/view_details.png) |
 
 ## Summary
 
