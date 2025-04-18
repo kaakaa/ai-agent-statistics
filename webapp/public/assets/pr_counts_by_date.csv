@@ -484,8 +484,8 @@ date,author,count,repos
 2024-11-30,openhands-agent,3,1
 2024-11-30,gru-agent,2,1
 2024-11-30,gru-agent-staging,13,2
-2024-12-01,openhands-agent,2,1
 2024-12-01,devin-ai-integration,2,2
+2024-12-01,openhands-agent,2,1
 2024-12-01,gru-agent,1,1
 2024-12-01,gru-agent-staging,2,1
 2024-12-02,gru-agent,4,1
@@ -559,8 +559,8 @@ date,author,count,repos
 2024-12-22,openhands-agent,2,1
 2024-12-22,devin-ai-integration,62,31
 2024-12-22,gru-agent-staging,20,2
-2024-12-22,sweep-ai,2,2
 2024-12-22,gru-agent,15,2
+2024-12-22,sweep-ai,2,2
 2024-12-23,devin-ai-integration,90,45
 2024-12-23,gru-agent,4,2
 2024-12-23,sweep-ai,2,1
@@ -653,8 +653,8 @@ date,author,count,repos
 2025-01-17,openhands-agent,1,1
 2025-01-17,devin-ai-integration,85,50
 2025-01-17,gru-agent-staging,14,3
-2025-01-17,gru-agent,3,1
 2025-01-17,sweep-ai,2,1
+2025-01-17,gru-agent,3,1
 2025-01-18,devin-ai-integration,81,32
 2025-01-18,sweep-ai,2,1
 2025-01-18,gru-agent-staging,10,2
@@ -761,10 +761,10 @@ date,author,count,repos
 2025-02-17,devin-ai-integration,167,61
 2025-02-17,gru-agent-staging,2,2
 2025-02-17,gru-agent,9,3
-2025-02-18,devin-ai-integration,169,63
 2025-02-18,gru-agent-staging,7,4
 2025-02-18,sweep-ai,7,3
 2025-02-18,gru-agent,3,2
+2025-02-18,devin-ai-integration,169,63
 2025-02-19,devin-ai-integration,200,50
 2025-02-19,gru-agent,9,2
 2025-02-19,gru-agent-staging,3,2
@@ -856,8 +856,8 @@ date,author,count,repos
 2025-03-15,sweep-ai,12,1
 2025-03-15,gru-agent,9,4
 2025-03-16,devin-ai-integration,116,33
-2025-03-16,gru-agent,2,1
 2025-03-16,sweep-ai,4,1
+2025-03-16,gru-agent,2,1
 2025-03-17,devin-ai-integration,131,47
 2025-03-17,gru-agent,7,5
 2025-03-18,gru-agent,1,1
@@ -952,3 +952,6 @@ date,author,count,repos
 2025-04-16,gru-agent-staging,5,3
 2025-04-16,gru-agent,3,2
 2025-04-16,devin-ai-integration,214,72
+2025-04-17,devin-ai-integration,135,57
+2025-04-17,gru-agent,2,2
+2025-04-18,devin-ai-integration,1,1
